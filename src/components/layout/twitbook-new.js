@@ -90,21 +90,7 @@ class TwitNew extends LitElement {
             :host {
                 display: block;
             }
-            textarea {
-                position: relative;
-                display: block;
-                width: 90%;
-                margin-left: 5%;
-                height: 250px;
-            }
-            button, btn {
-                margin-top:5px;
-                margin-left: 5%;
-                background-color: light-blue;
-                border: 1px solid light-blue;
-                border-radius: 5px;
-                padding: 2px 4px;
-            }
+        
             
         `;
     }
@@ -112,9 +98,9 @@ class TwitNew extends LitElement {
 	render(){
         return html`
             <form @submit="${this.handleTweet}">
-                <textarea placeholder="Post un nouveau message" @change="${e => this.content = e.target.value}">${this.content}</textarea>
+                <textarea placeholder="Ecrit un nouveau message" @change="${e => this.content = e.target.value}">${this.content}</textarea>
                 <section class="actions">
-                    <button type="submit">Envoyer</button>
+                    <button type="submit">Enregistrer</button>
                     <input type="file" class="btn" @input="${e => this.file = e.target.files}">
                 </section>
             </form>
