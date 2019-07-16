@@ -90,8 +90,8 @@ class TwitElement extends LitElement {
                             <button type="submit">Enregistrer</button>
                         </section>
                     </form>
-                    <twit-button @click="${this.handleLike}" class="like"></twit-button>
-                    <twit-button @click="${this.handleRetweet}" class="retweet"></twit-button>
+                    <button @click="${this.handleLike}" class="like">Like</button>
+                    <button @click="${this.handleRetweet}" class="retweet">Retweet</button>
                 </footer>
 		`;
 	}

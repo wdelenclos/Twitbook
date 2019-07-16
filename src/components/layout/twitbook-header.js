@@ -29,6 +29,18 @@ class TwitHeader extends LitElement {
                 height: 48px;
                 width: 48px;
             }
+            ul{
+                display: flex;
+                justify-content: center;
+                list-style: none;
+            }
+            li{
+                margin-left:10px;
+            }
+            a{
+                text-decoration:none; 
+                color:black;
+            }
         `;
     }
 
