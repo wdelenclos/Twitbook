@@ -11,7 +11,7 @@ class TwitElement extends LitElement {
         this.author = {};
         this.tweet = {};
     }
-    
+
     static get properties(){
         return {
             id: String,
@@ -41,6 +41,18 @@ class TwitElement extends LitElement {
         }
     }
     handleComment(e) {
+        e.preventDefault();
+
+        let data = {
+            content: this.content,
+            author: this.author,
+            date: new Date().getTime()
+        }
+
+        const database = firebase.firestore();
+        database.collection('comments').add(data);
+        console.log("Le commentaire a été posté");
+
     }
 
     handleLike(e) {
@@ -72,7 +84,12 @@ class TwitElement extends LitElement {
                     }
                 </main>
                 <footer>
-                    <twit-button @click="${this.handleComment}" class="comment"></twit-button>
+                    <form @submit="${this.handleComment}">
+                        <textarea placeholder="Laisser un commentaire" @change="${e => this.content = e.target.value}">${this.content}</textarea>
+                        <section class="actions">
+                            <button type="submit">Enregistrer</button>
+                        </section>
+                    </form>
                     <twit-button @click="${this.handleLike}" class="like"></twit-button>
                     <twit-button @click="${this.handleRetweet}" class="retweet"></twit-button>
                 </footer>
