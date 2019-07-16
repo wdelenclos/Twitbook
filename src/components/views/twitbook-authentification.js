@@ -6,7 +6,7 @@ import "../data/twitbook-store.js";
 import "../data/twitbook-auth.js";
 import "../data/twitbook-login.js";
 
-class TwitHome extends LitElement {
+class TwitAuthentification extends LitElement {
     constructor() {
         super();
         this.user = {};
@@ -101,7 +101,7 @@ class TwitHome extends LitElement {
         }, 0);
     }
 
-    handleLogin(e) {
+    handleAuth(e) {
         this.user = e.detail.user;
         this.logged = true;
         setTimeout(() => {
@@ -164,9 +164,8 @@ class TwitHome extends LitElement {
             <section>
                 <twit-header></twit-header>
                 ${
-                !this.logged ? html`
-                <twit-login @user-logged="${this.handleLogin}">
-                </twit-login>
+            !this.logged ? html`
+                <twit-auth @user-logged="${this.handleAuth}"></twit-auth>
                 ` : html`
                 <twit-store collection="tweets" @child-changed="${this.addTweet}">
                 </twit-store>
@@ -179,10 +178,10 @@ class TwitHome extends LitElement {
                     `)}
                 </ul>
                 `
-                    }
+            }
             </section>
        `;
     }
 }
 
-customElements.define('twit-home', TwitHome);
+customElements.define('twit-authentification', TwitAuthentification);

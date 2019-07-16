@@ -21,6 +21,21 @@ class TwitLogin extends LitElement {
             :host{
                 display:block;
             }
+            a{
+             color:black;
+             
+            }
+            form{
+            margin-bottom:10px;
+            }
+            .center{
+            display:flex;
+            justify-content:center;
+            }
+            input{
+               margin-right:10px;
+            }
+            
         `;
     }
 
@@ -40,12 +55,13 @@ class TwitLogin extends LitElement {
 
     render(){
         return html`
-            <h1>Connexion</h1>
-            <form @submit="${this.handleForm}">
+            <h1 class="center">Connexion</h1>
+            <form class="center" @submit="${this.handleForm}">
                 <input type="email" placeholder="Email" .value="${this.email}" @input="${e => this.email = e.target.value}">
                 <input type="password"  placeholder="Mot de passe" .value="${this.password}" @input="${e => this.password = e.target.value}">
                 <button type="submit">Enregistrer</button>
             </form>
+            <a href="/inscription" class="center"> Inscrivez-vous</a>
         `;
     }
 }

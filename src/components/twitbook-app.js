@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import "./views/twitbook-home.js";
 import "./views/twitbook-profile.js";
 import "./views/twitbook-post.js";
+import "./views/twitbook-authentification.js";
 
 class TwitApp extends LitElement {
     
@@ -24,6 +25,11 @@ class TwitApp extends LitElement {
                 path: '/post',
                 component: 'twit-post',
                 action: () => import("./views/twitbook-post.js")
+            },
+            {
+                path: '/inscription',
+                component: 'twit-authentification',
+                action: () => import("./views/twitbook-authentification.js")
             }
             // {
             //     path: '(.*)',

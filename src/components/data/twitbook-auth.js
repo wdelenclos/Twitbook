@@ -5,7 +5,6 @@ import 'firebase/auth';
 class TwitAuth extends LitElement {
     constructor() {
         super();
-        this.name = "";
         this.email = "";
         this.password = "";
     }
@@ -22,6 +21,17 @@ class TwitAuth extends LitElement {
             :host{
                 display:block;
             }
+            form{
+            margin-bottom:10px;
+            }
+            .center{
+            display:flex;
+            justify-content:center;
+            }
+            input{
+               margin-right:10px;
+            }
+            
         `;
     }
 
@@ -33,9 +43,10 @@ class TwitAuth extends LitElement {
                 const database = firebase.firestore();
                 database.collection('users').doc(user.user.uid).set({
                     email: this.email,
-                    name: this.name
                 });
-                console.log('Inscription succes');
+                console.log('Inscription succès');
+                localStorage.setItem('logged', true);
+                this.dispatchEvent(new CustomEvent("user-logged", { detail: { user } }));
                 this.email = "";
                 this.password = "";
             }).catch(console.log);
@@ -43,19 +54,16 @@ class TwitAuth extends LitElement {
 
     render(){
         return html`
-            <h1>Inscription</h1>
-            <form @submit="${this.handleForm}">
+            <h1 class="center">Inscription</h1>
+            <form class="center" @submit="${this.handleForm}">
                 <p>
                     <input type="email" placeholder="Email" id="Email" .value="${this.email}" @input="${e => this.email = e.target.value}">
                 </p>
                 <p>
                     <input type="password" placeholder="Mot de passe" id="Password" .value="${this.password}" @input="${e => this.password = e.target.value}">
                 </p>
-                <p>
-                    <input type="text"  placeholder="Nom" id="Name" .value="${this.name}" @input="${e => this.name = e.target.value}">
-                </p>
             
-                <button type="submit">Enregistrer</button>
+                <button class="uk-button uk-button-primary" type="submit">Enregistrer</button>
             </form>
         `;
     }
