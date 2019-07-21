@@ -47,12 +47,10 @@ class TwitElement extends LitElement {
             content: this.content,
             author: this.author,
             date: new Date().getTime()
-        }
-
+        };
         const database = firebase.firestore();
         database.collection('comments').add(data);
         console.log("Le commentaire a été posté");
-
     }
 
     handleLike(e) {
