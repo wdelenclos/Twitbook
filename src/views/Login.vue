@@ -33,12 +33,18 @@ export default {
   },
   methods: {
     login: function () {
+        let vm = this;
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
         (user) => {
           this.$router.replace('home')
         },
         (err) => {
-          alert('Oops. ' + err.message)
+            vm.$notify({
+                group: 'foo',
+                title: ':(',
+                text: err,
+                type: 'error'
+            });
         }
       )
     }

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav" v-if="nav">
+    <div id="nav" v-if="nav" style="z-index: 6; background-color: #fff">
       <img src="./assets/logo.png" width="52px" class=" d-inline-block">
       <span class="float-right mt-2">
       <router-link to="/home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></router-link>
@@ -9,6 +9,7 @@
       </span>
     </div>
     <div class="container grid-lg" style="margin-top: 52px; padding: 24px">
+      <notifications group="foo" position="bottom center" style="margin-bottom: 72px"/>
       <div class="columns">
         <div class="column col-12">
           <router-view/>
@@ -43,7 +44,7 @@ export default {
     background-color: #fff;
   }
   #nav svg{
-    margin: 0 42px;
+    margin: 0 24px;
     color: #4560CD!important;
   }
   .btn-primary{

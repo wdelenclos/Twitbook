@@ -1,25 +1,17 @@
 <template>
-  <div class="home">
-    <ActivityFeed msg="Welcome to Your Vue.js App"/>
-    <button @click="logout">Logout</button>
+  <div class="post">
+    <h3 style="margin: 32px 0">Poster un Sub</h3>
+   <Post/>
   </div>
 </template>
 
 <script>
-import firebase from 'firebase'
-// @ is an alias to /src
-import ActivityFeed from '@/components/ActivityFeed.vue'
+import Post from '../components/Post.vue'
+
 export default {
-  name: 'home',
+  name: 'post',
   components: {
-    ActivityFeed
+      Post
   },
-  methods: {
-    logout: function () {
-      firebase.auth().signOut().then(() => {
-        this.$router.replace('login')
-      })
-    }
-  }
 }
 </script>

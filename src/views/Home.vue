@@ -1,36 +1,22 @@
 <template>
   <div class="home">
-    <ActivityFeed msg="Welcome to Your Vue.js App"/>
-    <div>
-      <p>UID: {{uid || 'None'}}</p>
-      <div>
-        <ul>
-          <li v-for="post in posts" v-bind:key="post.id">
-            <div v-if="post.user === uid">
-
-            </div>
-            <div v-else>
-              {{post.text}}
-            </div>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-    <button @click="logout">Logout</button>
+    <h3 style="margin: 32px 0">Fil de vos feed</h3>
+    <Post style="margin-bottom: 32px"/>
+    <ActivityFeed :posts={posts} />
   </div>
 </template>
 
 <script>
 import ActivityFeed from '../components/ActivityFeed.vue'
+import Post from '../components/Post.vue'
 import firebase from '../firebase'
-const auth = firebase.auth()
 const db = firebase.firestore()
 
 export default {
   name: 'home',
   components: {
-    ActivityFeed
+    ActivityFeed,
+      Post
   },
   data () {
     return {
@@ -47,19 +33,27 @@ export default {
   },
   created () {
       let vm = this;
-    db.collection('posts').get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        // doc.data() is never undefined for query doc snapshots
-          vm.posts.push(doc.data())
-      })
-    })
+      // Posts
+      db.collection('posts').onSnapshot(function(querySnapshot) {
+          vm.posts=[]
+          querySnapshot.forEach(function(doc) {
+              let post = doc.data()
+              db.collection("users").doc(post.user).get().then(function(doc) {
+                  if (doc.exists) {
+                      let data = { ...doc.data(),"id": doc.id};
+                      let res = { "user" : data, "post": post}
+                      vm.posts.unshift(res);
+                  } else {
+                      // doc.data() will be undefined in this case
+                      console.log("No such document!");
+                  }
+              }).catch(function(error) {
+                  console.log("Error getting document:", error);
+              });
+
+          });
+      });
+
   },
-  methods: {
-    logout: function () {
-      auth.signOut().then(() => {
-        this.$router.replace('login')
-      })
-    }
-  }
 }
 </script>
