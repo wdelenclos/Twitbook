@@ -56,16 +56,17 @@ export default {
         let vm = this;
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
         (user) => {
-            console.log(user);
             let userRef =  db.collection("users");
             userRef.doc(user.user.uid).set({
                 firstname: vm.firstname,
                 name: vm.name,
                 username: vm.username,
                 email: user.user.email,
-                live: true
+                live: true,
+                followers:[]
                 }
                 );
+            window.sessionStorage.setItem('subfeed', JSON.stringify(user))
           this.$router.replace('home')
         },
         (err) => {

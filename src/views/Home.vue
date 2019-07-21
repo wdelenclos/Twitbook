@@ -11,6 +11,8 @@ import ActivityFeed from '../components/ActivityFeed.vue'
 import Post from '../components/Post.vue'
 import firebase from '../firebase'
 const db = firebase.firestore()
+const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
+
 
 export default {
   name: 'home',
@@ -25,10 +27,10 @@ export default {
   },
   computed: {
     uid () {
-      if (!window.user) {
+      if (!userData) {
         return null
       }
-      return window.user.uid
+      return userData.uid
     }
   },
   created () {
@@ -41,10 +43,14 @@ export default {
               db.collection("users").doc(post.user).get().then(function(doc) {
                   if (doc.exists) {
                       let data = { ...doc.data(),"id": doc.id};
-                      let res = { "user" : data, "post": post}
-                      vm.posts.unshift(res);
+                      let res = { "user" : data, "post": post};
+                      if (data.followers.indexOf(userData.uid) !== -1 ) {
+                          vm.posts.unshift(res);
+                      }
+                      else if(data.id === userData.uid){
+                          vm.posts.unshift(res);
+                      }
                   } else {
-                      // doc.data() will be undefined in this case
                       console.log("No such document!");
                   }
               }).catch(function(error) {

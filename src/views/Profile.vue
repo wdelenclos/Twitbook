@@ -13,7 +13,7 @@
         <button class="btn btn-secodnary" @click="logout">Deconnexion</button>
       </div>
       <div style="display: contents;" v-else>
-        <button class="btn btn-primary mb-2" @click="logout">Follow</button>
+        <button class="btn btn-primary mb-2" @click="follow(userId)">{{followee}}</button>
       </div>
     </div>
     </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from '../firebase'
 const db = firebase.firestore()
 const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
 
@@ -57,7 +57,8 @@ export default {
           name: "",
           status: false,
           posts: [],
-          userId: ""
+          userId: "",
+          followee : "Follow"
       }
     },
     computed: {
@@ -74,6 +75,30 @@ export default {
     },
       redirect: function() {
           this.$router.replace('post')
+      },
+      follow: function(id){
+        let vm = this;
+          let docRef = db.collection("users").doc(id);
+          let o = {};
+          docRef.get().then(function(thisDoc) {
+              if (thisDoc.exists) {
+                  //user is already there, write only last login
+                  console.log(thisDoc.data());
+                  let followers = thisDoc.data().followers;
+                  followers.unshift(userData.uid);
+                  o.followers = followers;
+                  docRef.update(o);
+                  vm.$notify({
+                      group: 'foo',
+                      title: ':)',
+                      text: "Follow !",
+                      type: 'success'
+                  });
+                  vm.followee = "Unfollow"
+              }
+          }).catch(function(error) {
+              alert(error.message);
+          });
       }
   },
     created() {

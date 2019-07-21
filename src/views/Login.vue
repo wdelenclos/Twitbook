@@ -36,6 +36,7 @@ export default {
         let vm = this;
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
         (user) => {
+            window.sessionStorage.setItem('subfeed', JSON.stringify(user))
           this.$router.replace('home')
         },
         (err) => {

@@ -33,10 +33,9 @@ export default {
     computed: {
         uid () {
 
-            if (!window.user) {
+            if (!userData) {
                 return null
             }
-            console.log(userData.uid)
             return userData.uid
         },
         postsAvailables : function(){
