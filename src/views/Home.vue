@@ -40,7 +40,7 @@ export default {
           vm.posts=[]
           querySnapshot.forEach(function(doc) {
               let postdata = { ...doc.data(),"id": doc.id};
-              db.collection("users").doc(post.user).get().then(function(doc) {
+              db.collection("users").doc(postdata.user).get().then(function(doc) {
                   if (doc.exists) {
                       let data = { ...doc.data(),"id": doc.id};
                       let res = { "user" : data, "post": postdata};
