@@ -75,7 +75,7 @@
                 let likes = doc.data().likes;
                 let currentUserLikeStatus = vm.isLiked(post.post.likes);
                 if(currentUserLikeStatus){
-                  likes.filter(like => like != userData.uid)
+                  likes = likes.filter(like => like != userData.uid)
                 }else{
                   likes.push(userData.uid)
                 }
