@@ -14,23 +14,12 @@
                     <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
                     <p class="tile-subtitle">" {{post.post.text}} "</p>
                     <p v-if="!readonly">
-                        <button class="btn btn-primary btn-sm mr-2" onclick="like(post.id)">❤
-                            {{post.post.likes.length}}
-                        </button>
+                       <button id="like" class="btn btn-sm mr-2" v-bind:class="{ 'btn-primary': isLiked(post.post.likes) }" v-on:click="like(post)">❤  {{post.post.likes.length}}</button>
                         <button class="btn btn-sm" @click="rt(post.post)">⟳</button>
                     </p>
                 </div>
             </div>
         </div>
-        <div class="tile-content">
-          <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
-          <p class="tile-subtitle">" {{post.post.text}} "</p>
-          <p v-if="!readonly">
-            <button id="like" class="btn btn-sm mr-2" v-bind:class="btn-primary" v-on:click="like(post)">❤  {{post.post.likes.length}}</button>
-            <button class="btn btn-sm" onclick="rt">⟳ {{post.post.rt.length}}</button>
-          </p>
-        </div>
-      </div>
     </div>
 </template>
 
@@ -83,11 +72,10 @@
           like: function(post){
             let vm = this;
             let postRef = db.collection('posts').doc(post.post.id).get().then((doc) => {
-                let currentLikes = doc.data().likes;
-                let likes = []
+                let likes = doc.data().likes;
                 let currentUserLikeStatus = vm.isLiked(post.post.likes);
                 if(currentUserLikeStatus){
-                  likes = currentLikes.filter(like => like != userData.uid)
+                  likes.filter(like => like != userData.uid)
                 }else{
                   likes.push(userData.uid)
                 }
