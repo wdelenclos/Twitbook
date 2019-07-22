@@ -12,13 +12,17 @@
           <input class="form-input" v-model="email" type="email" id="input-email" placeholder="Email">
 
           <label class="form-label" for="input-name">Nom</label>
-          <input class="form-input" v-model="name" type="text" id="input-name" placeholder="Jérôme">
+          <input class="form-input" v-model="name" type="text" id="input-name" placeholder="de la Buenousse">
 
           <label class="form-label" for="input-firstname">Prénom</label>
-          <input class="form-input" v-model="firstname" type="text" id="input-firstname" placeholder="Dupont">
-
-         <label class="form-label" for="input-avatar">Prénom</label>
-          <input class="form-input" v-bind="avatar" type="file" id="input-avatar">
+          <input class="form-input" v-model="firstname" type="text" id="input-firstname" placeholder="Jérome">
+          <input
+                  type="file"
+                  style="display: none"
+                  ref="image"
+                  accept="image/*"
+                  @change="onFilePicked"
+          />
 
           <label class="form-label" for="input-email">Mot de passe</label>
           <input class="form-input" type="password" v-model="password" placeholder="Password"><br>
@@ -52,7 +56,29 @@ export default {
         }
     },
   methods: {
+      onFilePicked(e) {
+          const files = e.target.files;
+          if (files[0] !== undefined) {
+              this.imageName = files[0].name;
+              if (this.imageName.lastIndexOf(".") <= 0) {
+                  return;
+              }
+              const fr = new FileReader();
+              fr.readAsDataURL(files[0]);
+              fr.addEventListener("load", () => {
+                  this.imageUrl = fr.result;
+                  //console.log("imageUrl");
+                  this.imageFile = files[0]; // this is an image file that can be sent to server...
+                  //this.getImages();
+              });
+          } else {
+              this.imageName = "";
+              this.imageFile = "";
+              this.imageUrl = "";
+          }
+      },
     signUp: function () {
+        var storageRef = firebase.storage().ref();
         let vm = this;
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
         (user) => {
