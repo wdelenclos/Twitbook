@@ -14,23 +14,12 @@
                     <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
                     <p class="tile-subtitle">" {{post.post.text}} "</p>
                     <p v-if="!readonly">
-                        <button class="btn btn-primary btn-sm mr-2" onclick="like(post.id)">❤
-                            {{post.post.likes.length}}
-                        </button>
+                       <button id="like" class="btn btn-sm mr-2" v-bind:class="btn-primary" v-on:click="like(post)">❤  {{post.post.likes.length}}</button>
                         <button class="btn btn-sm" @click="rt(post.post)">⟳</button>
                     </p>
                 </div>
             </div>
         </div>
-        <div class="tile-content">
-          <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
-          <p class="tile-subtitle">" {{post.post.text}} "</p>
-          <p v-if="!readonly">
-            <button id="like" class="btn btn-sm mr-2" v-bind:class="btn-primary" v-on:click="like(post)">❤  {{post.post.likes.length}}</button>
-            <button class="btn btn-sm" onclick="rt">⟳ {{post.post.rt.length}}</button>
-          </p>
-        </div>
-      </div>
     </div>
 </template>
 
