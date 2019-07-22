@@ -22,6 +22,7 @@ import firebase from '../firebase'
 
 const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
 const db = firebase.firestore()
+//const postRef = db.collection('posts')
 const commentsRef = db.collection('comments')
 
 export default {
@@ -51,6 +52,19 @@ export default {
       })
     }
   }, created() {
+    let vm = this
+    let uui
+    if (vm.$router.history.current.query.post === undefined) {
+      uui = userData.uid
+    } else {
+      uui = vm.$router.history.current.query.post
+    }
+    const postRef = db.collection('posts')
+    postRef.get().then(function (data) {
+      console.log(data);
+    }).catch(function (error) {
+      console.log('Error getting cached document:', error)
+    })
 
   }
 }
