@@ -11,8 +11,9 @@
           <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
           <p class="tile-subtitle">" {{post.post.text}} "</p>
           <p v-if="!readonly">
-            <button class="btn btn-primary btn-sm mr-2" onclick="like(post.id)">❤  {{post.post.likes.length}}</button>
-            <button class="btn btn-sm" onclick="rt">⟳ {{post.post.rt.length}}</button>
+            <button class="btn btn-primary btn-sm mr-2" @click="like(post.id)">❤  {{post.post.likes.length}}</button>
+            <button class="btn btn-sm" >⟳ {{post.post.rt.length}}</button>
+            <button class="btn btn-sm" @click="redirectPost(post.id)">More </button>
           </p>
         </div>
       </div>
@@ -22,7 +23,7 @@
 
 <script>
 
-    const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
+const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
 export default {
   name: 'ActivityFeed',
   props: {
@@ -30,26 +31,28 @@ export default {
     readonly: Boolean
   },
 
-    computed: {
-        uid () {
-
-            if (!userData) {
-                return null
-            }
-            return userData.uid
-        },
-        postsAvailables : function(){
-            return this.posts['posts']
-        }
+  computed: {
+    uid () {
+      if (!userData) {
+        return null
+      }
+      return userData.uid
     },
-    methods: {
-        like: function(){
-
-        },
-        redirect: function(id){
-            this.$router.push({ path: 'user', query: { user: id } })
-        }
+    postsAvailables: function () {
+      return this.posts['posts']
     }
+  },
+  methods: {
+    like: function () {
+
+    },
+    redirect: function (id) {
+      this.$router.push({ path: 'user', query: { user: id } })
+    },
+    redirectPost: function (id) {
+      this.$router.push({ path: 'singlePost', query: { post: id } })
+    }
+  }
 }
 </script>
 

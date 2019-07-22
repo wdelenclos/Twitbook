@@ -34,48 +34,48 @@
 <script>
 import firebase from 'firebase'
 const db = firebase.firestore()
-const storageRef = firebase.storage().ref()
+
 export default {
   name: 'signUp',
   data () {
     return {
       email: '',
       password: '',
-        avatar: '',
-        firstname: '',
-        name: ''
+      avatar: '',
+      firstname: '',
+      name: ''
     }
   },
-    computed: {
-        username(){
-           return this.email.substring(0, this.email.indexOf('@'));
-        }
-    },
+  computed: {
+    username () {
+      return this.email.substring(0, this.email.indexOf('@'))
+    }
+  },
   methods: {
     signUp: function () {
-        let vm = this;
+      let vm = this
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
         (user) => {
-            let userRef =  db.collection("users");
-            userRef.doc(user.user.uid).set({
-                firstname: vm.firstname,
-                name: vm.name,
-                username: vm.username,
-                email: user.user.email,
-                live: true,
-                followers:[]
-                }
-                );
-            window.sessionStorage.setItem('subfeed', JSON.stringify(user))
+          let userRef = db.collection('users')
+          userRef.doc(user.user.uid).set({
+            firstname: vm.firstname,
+            name: vm.name,
+            username: vm.username,
+            email: user.user.email,
+            live: true,
+            followers: []
+          }
+          )
+          window.sessionStorage.setItem('subfeed', JSON.stringify(user))
           this.$router.replace('home')
         },
         (err) => {
-            vm.$notify({
-                group: 'foo',
-                title: ':(',
-                text: err,
-                type: 'error'
-            });
+          vm.$notify({
+            group: 'foo',
+            title: ':(',
+            text: err,
+            type: 'error'
+          })
         }
       )
     }

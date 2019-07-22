@@ -1,13 +1,18 @@
 <template>
-  <div class="post">
+  <div class="comment">
     <div class="card" style="padding: 32px">
-      <h4>Quoi de neuf ?</h4>
+
+
+
+      <div class="divider"></div>
+      <hr/>
+      <h4>Commentaire</h4>
       <hr/>
       <div class="form-group">
-        <textarea class="form-input" id="input-post" maxlength="240" v-model="postTest" placeholder="Mon super sub" rows="3"></textarea>
+        <textarea class="form-input" id="input-post" maxlength="240" v-model="commentTest" placeholder="Mon super commentaire" rows="3"></textarea>
         <label class="form-label" for="input-post">Maximum 240 caractères</label>
       </div>
-      <button class="btn btn-primary" @click="post">Poster mon Sub</button>
+      <button class="btn btn-primary" @click="post">Poster mon commentaire</button>
     </div>
   </div>
 </template>
@@ -17,36 +22,36 @@ import firebase from '../firebase'
 
 const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
 const db = firebase.firestore()
-const postsRef = db.collection('posts')
+const commentsRef = db.collection('comments')
 
 export default {
-  name: 'post',
+  name: 'comment',
   components: {
 
   },
   data: function () {
     return {
-      postTest: ''
+      commentTest: ''
     }
   },
   methods: {
     post: function () {
       let vm = this
-      postsRef.doc().set({
-        text: vm.postTest,
+      commentsRef.doc().set({
+        text: vm.commentTest,
         user: userData.uid,
         createdAt: Date.now(),
-        likes: [],
-        rt: [],
         comments: []
       }).then(res => {
         vm.$notify({
           group: 'foo',
-          title: 'Sub is published',
+          title: 'Comment is published',
           type: 'success'
         })
       })
     }
+  }, created() {
+
   }
 }
 </script>
