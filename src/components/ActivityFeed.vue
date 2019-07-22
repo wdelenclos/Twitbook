@@ -22,15 +22,24 @@
                 </div>
             </div>
         </div>
+        <div class="tile-content">
+          <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
+          <p class="tile-subtitle">" {{post.post.text}} "</p>
+          <p v-if="!readonly">
+            <button id="like" class="btn btn-sm mr-2" v-bind:class="btn-primary" v-on:click="like(post)">❤  {{post.post.likes.length}}</button>
+            <button class="btn btn-sm" onclick="rt">⟳ {{post.post.rt.length}}</button>
+          </p>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
     import firebase from '../firebase'
-
     const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
     const db = firebase.firestore()
     const postsRef = db.collection("posts");
+
     export default {
         name: 'ActivityFeed',
         props: {
@@ -71,10 +80,29 @@
                     });
                 });
             },
+            isLiked: function(like){
+                return like.includes(userData.uid)
+          },
+          like: function(post){
+            let vm = this;
+            let postRef = db.collection('posts').doc(post.post.id).get().then((doc) => {
+                let currentLikes = doc.data().likes;
+                let likes = []
+                let currentUserLikeStatus = vm.isLiked(post.post.likes);
+                if(currentUserLikeStatus){
+                  likes = currentLikes.filter(like => like != userData.uid)
+                }else{
+                  likes.push(userData.uid)
+                }
+                db.collection('posts').doc(post.post.id).update({
+                  likes: likes
+                })
+            });
+          },
             redirect: function (id) {
                 this.$router.push({path: 'user', query: {user: id}})
             }
-        }
+      }
     }
 </script>
 
