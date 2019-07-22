@@ -39,11 +39,11 @@ export default {
       db.collection('posts').onSnapshot(function(querySnapshot) {
           vm.posts=[]
           querySnapshot.forEach(function(doc) {
-              let post = doc.data()
+              let postdata = { ...doc.data(),"id": doc.id};
               db.collection("users").doc(post.user).get().then(function(doc) {
                   if (doc.exists) {
                       let data = { ...doc.data(),"id": doc.id};
-                      let res = { "user" : data, "post": post};
+                      let res = { "user" : data, "post": postdata};
                       if (data.followers.indexOf(userData.uid) !== -1 ) {
                           vm.posts.unshift(res);
                       }
