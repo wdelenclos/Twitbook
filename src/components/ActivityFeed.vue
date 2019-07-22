@@ -60,9 +60,6 @@
             }
         },
         methods: {
-            like: function () {
-
-            },
             rt: function (pust) {
                 let vm = this;
                 postsRef.doc().set({
@@ -79,9 +76,9 @@
                         type: 'success'
                     });
                 });
-            },
-            isLiked: function(like){
-                return like.includes(userData.uid)
+          },
+          isLiked: function(like){
+            return like.includes(userData.uid)
           },
           like: function(post){
             let vm = this;
