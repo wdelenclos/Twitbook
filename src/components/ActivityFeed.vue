@@ -12,8 +12,8 @@
           <p class="tile-subtitle">" {{post.post.text}} "</p>
           <p v-if="!readonly">
             <button class="btn btn-primary btn-sm mr-2" @click="like(post.id)">❤  {{post.post.likes.length}}</button>
-            <button class="btn btn-sm" >⟳ {{post.post.rt.length}}</button>
-            <button class="btn btn-sm" @click="redirectPost(post.id)">More </button>
+            <button class="btn btn-sm mr-2" >⟳ {{post.post.rt.length}}</button>
+            <button class="btn btn-sm" @click="redirectPost(post.id)">Commentaires </button>
           </p>
         </div>
       </div>
@@ -49,8 +49,8 @@ export default {
     redirect: function (id) {
       this.$router.push({ path: 'user', query: { user: id } })
     },
-    redirectPost: function (id) {
-      this.$router.push({ path: 'singlePost', query: { post: id } })
+    redirectPost: function (post) {
+      this.$router.push({ path: 'singlePost', query: { post: post } })
     }
   }
 }
