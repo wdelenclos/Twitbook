@@ -58,7 +58,7 @@ export default {
           status: false,
           posts: [],
           userId: "",
-          followee : "Follow"
+          followee : "Unfollow"
       }
     },
     computed: {
@@ -82,19 +82,27 @@ export default {
           let o = {};
           docRef.get().then(function(thisDoc) {
               if (thisDoc.exists) {
+
+                function arrayRemove(arr, value) {
+
+                  return arr.filter(function(ele){
+                    return ele != value;
+                  });
+
+                }
                   //user is already there, write only last login
                   console.log(thisDoc.data());
                   let followers = thisDoc.data().followers;
-                  followers.unshift(userData.uid);
-                  o.followers = followers;
+                  o.followers = arrayRemove(followers, userData.uid);
                   docRef.update(o);
                   vm.$notify({
                       group: 'foo',
                       title: ':)',
-                      text: "Follow !",
+                      text: "Unfollow !",
                       type: 'success'
                   });
-                  vm.followee = "Unfollow"
+                vm.$router.replace('home')
+
               }
           }).catch(function(error) {
               alert(error.message);
