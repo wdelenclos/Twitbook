@@ -11,18 +11,17 @@ import ActivityFeed from '../components/ActivityFeed.vue'
 import Post from '../components/Post.vue'
 import firebase from '../firebase'
 const db = firebase.firestore()
-const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
-
+const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
 
 export default {
   name: 'home',
   components: {
     ActivityFeed,
-      Post
+    Post
   },
   data () {
     return {
-        posts: []
+      posts: []
     }
   },
   computed: {

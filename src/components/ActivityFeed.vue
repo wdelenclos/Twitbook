@@ -20,6 +20,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="tile-content">
+          <p class="tile-title text-gray">{{post.post.createdAt}} | {{post.user.username}}</p>
+          <p class="tile-subtitle">" {{post.post.text}} "</p>
+          <p v-if="!readonly">
+            <button class="btn btn-primary btn-sm mr-2" @click="like(post.id)">❤  {{post.post.likes.length}}</button>
+            <button class="btn btn-sm mr-2" >⟳ {{post.post.rt.length}}</button>
+            <button class="btn btn-sm" @click="redirectPost(post.id)">Commentaires </button>
+          </p>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -66,6 +77,9 @@
                     });
                 });
           },
+           redirectPost: function (post) {
+      this.$router.push({ path: 'singlePost', query: { post: post } })
+    },
           isLiked: function(like){
             return like.includes(userData.uid)
           },
