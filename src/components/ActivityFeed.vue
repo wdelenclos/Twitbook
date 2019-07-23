@@ -15,7 +15,8 @@
                     <p class="tile-subtitle">" {{post.post.text}} "</p>
                     <p v-if="!readonly">
                        <button id="like" class="btn btn-sm mr-2" v-bind:class="{ 'btn-primary': isLiked(post.post.likes) }" v-on:click="like(post)">❤  {{post.post.likes.length}}</button>
-                        <button class="btn btn-sm" @click="rt(post.post)">⟳</button>
+                        <button class="btn btn-sm mr-2" @click="rt(post)">⟳</button>
+                        <button class="btn btn-sm mr-2" @click="redirectPost(post.post.id)">Commentaires</button>
                     </p>
                 </div>
             </div>
@@ -52,7 +53,7 @@
             rt: function (pust) {
                 let vm = this;
                 postsRef.doc().set({
-                    text: 'RT : ' +  pust.text,
+                    text: 'De ' + pust.user.username + ' : ' + pust.post.text,
                     user: userData.uid,
                     createdAt: Date.now(),
                     likes: [],
@@ -76,7 +77,17 @@
                 let currentUserLikeStatus = vm.isLiked(post.post.likes);
                 if(currentUserLikeStatus){
                   likes = likes.filter(like => like != userData.uid)
+                    vm.$notify({
+                        group: 'foo',
+                        title: 'Je n\'aime plus',
+                        type: 'success'
+                    });
                 }else{
+                    vm.$notify({
+                        group: 'foo',
+                        title: 'J\'aime',
+                        type: 'success'
+                    });
                   likes.push(userData.uid)
                 }
                 db.collection('posts').doc(post.post.id).update({
@@ -86,6 +97,10 @@
           },
             redirect: function (id) {
                 this.$router.push({path: 'user', query: {user: id}})
+            },
+            redirectPost: function (id) {
+                console.log(id)
+                this.$router.push({path: 'singlepost', query: {post: id}})
             }
       }
     }
