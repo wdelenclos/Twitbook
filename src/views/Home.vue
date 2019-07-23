@@ -33,29 +33,32 @@ export default {
     }
   },
   created () {
-    let vm = this
-    // Posts
-    db.collection('posts').onSnapshot(function (querySnapshot) {
-      vm.posts = []
-      querySnapshot.forEach(function (doc) {
-        let post = doc.data()
-        db.collection('users').doc(post.user).get().then(function (doc) {
-          if (doc.exists) {
-            let data = { ...doc.data(), 'id': doc.id }
-            let res = { 'user': data, 'post': post }
-            if (data.followers.indexOf(userData.uid) !== -1) {
-              vm.posts.unshift(res)
-            } else if (data.id === userData.uid) {
-              vm.posts.unshift(res)
-            }
-          } else {
-            console.log('No such document!')
-          }
-        }).catch(function (error) {
-          console.log('Error getting document:', error)
-        })
-      })
-    })
-  }
+      let vm = this;
+      // Posts
+      db.collection('posts').onSnapshot(function(querySnapshot) {
+          vm.posts=[]
+          querySnapshot.forEach(function(doc) {
+              let postdata = { ...doc.data(),"id": doc.id};
+              db.collection("users").doc(postdata.user).get().then(function(doc) {
+                  if (doc.exists) {
+                      let data = { ...doc.data(),"id": doc.id};
+                      let res = { "user" : data, "post": postdata};
+                      if (data.followers.indexOf(userData.uid) !== -1 ) {
+                          vm.posts.unshift(res);
+                      }
+                      else if(data.id === userData.uid){
+                          vm.posts.unshift(res);
+                      }
+                  } else {
+                      console.log("No such document!");
+                  }
+              }).catch(function(error) {
+                  console.log("Error getting document:", error);
+              });
+
+          });
+      });
+
+  },
 }
 </script>
