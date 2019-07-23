@@ -23,7 +23,6 @@
       <button class="btn btn-primary mb-2" @click="postComment">Poster un commentaire</button>
     </div>
 
-
     <div class="card mt-2 mb-2" style="padding: 16px 16px 0 16px;" v-for="post in comments"
          v-bind:key="post.id">
       <div class="tile">
@@ -48,33 +47,33 @@
 <script>
 import firebase from '../firebase'
 const db = firebase.firestore()
-const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
+const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
 export default {
   name: 'singlepost',
-    data: function (){
-      return {
-          post: "",
-          comment: '',
-        comments: []
-      }
-    },
-    computed: {
-      uid: function(){
-          return userData.uid
-      }
-    },
+  data: function () {
+    return {
+      post: '',
+      comment: '',
+      comments: []
+    }
+  },
+  computed: {
+    uid: function () {
+      return userData.uid
+    }
+  },
   methods: {
     logout: function () {
       firebase.auth().signOut().then(() => {
-          window.sessionStorage.removeItem('subfeed')
+        window.sessionStorage.removeItem('subfeed')
         this.$router.replace('login')
       })
     },
     postComment: function (e) {
-      e.preventDefault();
+      e.preventDefault()
       const db = firebase.firestore()
-      const commentRef = db.collection("comments");
-      let vm = this;
+      const commentRef = db.collection('comments')
+      let vm = this
       commentRef.doc().set({
         text: vm.comment,
         user: userData.uid,
@@ -85,60 +84,57 @@ export default {
           group: 'foo',
           title: 'Comment is published',
           type: 'success'
-        });
-      });
+        })
+      })
     },
     redirect: function (id) {
-      this.$router.push({path: 'user', query: {user: id}})
-    },
-  },
-    created() {
-      let vm = this;
-      let postId =  vm.$router.history.current.query.post;
-        const docRef = db.collection("posts").doc(postId);
-        docRef.get().then(function(doc) {
-          let postdata = { ...doc.data(),"id": doc.id};
-          db.collection("users").doc(postdata.user).get().then(function(doc) {
-            if (doc.exists) {
-              let data = { ...doc.data(),"id": doc.id};
-              let res = { "user" : data, "post": postdata};
-                vm.post = res;
-
-            } else {
-              console.log("No such document!");
-            }
-          }).catch(function(error) {
-            console.log("Error getting document:", error);
-          });
-        }).catch(function(error) {
-            console.log("Error getting cached document:", error);
-        });
-
-      // Comments
-      db.collection('comments').where("post", "==", vm.$router.history.current.query.post).onSnapshot(function(querySnapshot) {
-        vm.comments=[]
-        querySnapshot.forEach(function(doc) {
-          console.log(doc.data())
-          let postdata = { ...doc.data(),"id": doc.id};
-          db.collection("users").doc(postdata.user).get().then(function(doc) {
-            if (doc.exists) {
-              let data = { ...doc.data(),"id": doc.id};
-              let res = { "user" : data, "post": postdata};
-              if (data.followers.indexOf(userData.uid) !== -1 ) {
-                vm.comments.unshift(res);
-              }
-              else if(data.id === userData.uid){
-                vm.comments.unshift(res);
-              }
-            } else {
-              console.log("No such document!");
-            }
-          }).catch(function(error) {
-            console.log("Error getting document:", error);
-          });
-
-        });
-      });
+      this.$router.push({ path: 'user', query: { user: id } })
     }
+  },
+  created () {
+    let vm = this
+    let postId = vm.$router.history.current.query.post
+    const docRef = db.collection('posts').doc(postId)
+    docRef.get().then(function (doc) {
+      let postdata = { ...doc.data(), 'id': doc.id }
+      db.collection('users').doc(postdata.user).get().then(function (doc) {
+        if (doc.exists) {
+          let data = { ...doc.data(), 'id': doc.id }
+          let res = { 'user': data, 'post': postdata }
+          vm.post = res
+        } else {
+          console.log('No such document!')
+        }
+      }).catch(function (error) {
+        console.log('Error getting document:', error)
+      })
+    }).catch(function (error) {
+      console.log('Error getting cached document:', error)
+    })
+
+    // Comments
+    db.collection('comments').where('post', '==', vm.$router.history.current.query.post).onSnapshot(function (querySnapshot) {
+      vm.comments = []
+      querySnapshot.forEach(function (doc) {
+        console.log(doc.data())
+        let postdata = { ...doc.data(), 'id': doc.id }
+        db.collection('users').doc(postdata.user).get().then(function (doc) {
+          if (doc.exists) {
+            let data = { ...doc.data(), 'id': doc.id }
+            let res = { 'user': data, 'post': postdata }
+            if (data.followers.indexOf(userData.uid) !== -1) {
+              vm.comments.unshift(res)
+            } else if (data.id === userData.uid) {
+              vm.comments.unshift(res)
+            }
+          } else {
+            console.log('No such document!')
+          }
+        }).catch(function (error) {
+          console.log('Error getting document:', error)
+        })
+      })
+    })
+  }
 }
 </script>

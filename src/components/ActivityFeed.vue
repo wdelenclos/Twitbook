@@ -25,85 +25,84 @@
 </template>
 
 <script>
-    import firebase from '../firebase'
-    const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
-    const db = firebase.firestore()
-    const postsRef = db.collection("posts");
+import firebase from '../firebase'
+const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
+const db = firebase.firestore()
+const postsRef = db.collection('posts')
 
-    export default {
-        name: 'ActivityFeed',
-        props: {
-            posts: Object,
-            readonly: Boolean
-        },
+export default {
+  name: 'ActivityFeed',
+  props: {
+    posts: Object,
+    readonly: Boolean
+  },
 
-        computed: {
-            uid() {
-
-                if (!userData) {
-                    return null
-                }
-                return userData.uid
-            },
-            postsAvailables: function () {
-                return this.posts['posts']
-            }
-        },
-        methods: {
-            rt: function (pust) {
-                let vm = this;
-                postsRef.doc().set({
-                    text: 'De ' + pust.user.username + ' : ' + pust.post.text,
-                    user: userData.uid,
-                    createdAt: Date.now(),
-                    likes: [],
-                    rt: [],
-                    comments: []
-                }).then(res => {
-                    vm.$notify({
-                        group: 'foo',
-                        title: 'Sub republished',
-                        type: 'success'
-                    });
-                });
-          },
-          isLiked: function(like){
-            return like.includes(userData.uid)
-          },
-          like: function(post){
-            let vm = this;
-            let postRef = db.collection('posts').doc(post.post.id).get().then((doc) => {
-                let likes = doc.data().likes;
-                let currentUserLikeStatus = vm.isLiked(post.post.likes);
-                if(currentUserLikeStatus){
-                  likes = likes.filter(like => like != userData.uid)
-                    vm.$notify({
-                        group: 'foo',
-                        title: 'Je n\'aime plus',
-                        type: 'success'
-                    });
-                }else{
-                    vm.$notify({
-                        group: 'foo',
-                        title: 'J\'aime',
-                        type: 'success'
-                    });
-                  likes.push(userData.uid)
-                }
-                db.collection('posts').doc(post.post.id).update({
-                  likes: likes
-                })
-            });
-          },
-            redirect: function (id) {
-                this.$router.push({path: 'user', query: {user: id}})
-            },
-            redirectPost: function (id) {
-                console.log(id)
-                this.$router.push({path: 'singlepost', query: {post: id}})
-            }
+  computed: {
+    uid () {
+      if (!userData) {
+        return null
       }
+      return userData.uid
+    },
+    postsAvailables: function () {
+      return this.posts['posts']
     }
+  },
+  methods: {
+    rt: function (pust) {
+      let vm = this
+      postsRef.doc().set({
+        text: 'De ' + pust.user.username + ' : ' + pust.post.text,
+        user: userData.uid,
+        createdAt: Date.now(),
+        likes: [],
+        rt: [],
+        comments: []
+      }).then(res => {
+        vm.$notify({
+          group: 'foo',
+          title: 'Sub republished',
+          type: 'success'
+        })
+      })
+    },
+    isLiked: function (like) {
+      return like.includes(userData.uid)
+    },
+    like: function (post) {
+      let vm = this
+      db.collection('posts').doc(post.post.id).get().then((doc) => {
+        let likes = doc.data().likes
+        let currentUserLikeStatus = vm.isLiked(post.post.likes)
+        if (currentUserLikeStatus) {
+          likes = likes.filter(like => like !== userData.uid)
+          vm.$notify({
+            group: 'foo',
+            title: 'Je n\'aime plus',
+            type: 'success'
+          })
+        } else {
+          vm.$notify({
+            group: 'foo',
+            title: 'J\'aime',
+            type: 'success'
+          })
+          likes.push(userData.uid)
+        }
+        db.collection('posts').doc(post.post.id).update({
+          likes: likes
+        })
+      })
+    },
+    redirect: function (id) {
+      this.$router.push({ path: 'user', query: { user: id } })
+    },
+    redirectPost: function (id) {
+      console.log(id)
+      this.$router.push({ path: 'singlepost', query: { post: id } })
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
