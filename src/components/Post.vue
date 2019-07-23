@@ -15,37 +15,37 @@
 <script>
 import firebase from '../firebase'
 
-const userData = JSON.parse(window.sessionStorage.getItem('subfeed'))
+const userData = JSON.parse(window.sessionStorage.getItem('subfeed'));
 const db = firebase.firestore()
-const postsRef = db.collection('posts')
+const postsRef = db.collection("posts");
 
 export default {
   name: 'post',
   components: {
 
   },
-  data: function () {
-    return {
-      postTest: ''
-    }
-  },
+    data: function (){
+        return {
+            postTest: "",
+        }
+    },
   methods: {
-    post: function () {
-      let vm = this
-      postsRef.doc().set({
-        text: vm.postTest,
-        user: userData.uid,
-        createdAt: Date.now(),
-        likes: [],
-        rt: [],
-        comments: []
-      }).then(res => {
-        vm.$notify({
-          group: 'foo',
-          title: 'Sub is published',
-          type: 'success'
-        })
-      })
+      post: function () {
+          let vm = this;
+          postsRef.doc().set({
+              text: vm.postTest,
+              user: userData.uid,
+              createdAt: Date.now(),
+              likes: [],
+              rt: [],
+              comments: []
+          }).then(res => {
+              vm.$notify({
+                  group: 'foo',
+                  title: 'Sub is published',
+                  type: 'success'
+              });
+          });
     }
   }
 }
