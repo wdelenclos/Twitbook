@@ -6,7 +6,6 @@ import Login from './views/Login.vue'
 import SignUp from './views/SignUp.vue'
 import Profile from './views/Profile.vue'
 import Post from './views/Post.vue'
-import SinglePost from './views/SinglePost.vue'
 
 Vue.use(Router)
 
@@ -42,14 +41,6 @@ const router = new Router({
       path: '/post',
       name: 'Post',
       component: Post,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/singlePost',
-      name: 'SinglePost',
-      component: SinglePost,
       meta: {
         requiresAuth: true
       }
