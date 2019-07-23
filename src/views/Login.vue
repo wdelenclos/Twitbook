@@ -33,19 +33,19 @@ export default {
   },
   methods: {
     login: function () {
-        let vm = this;
+      let vm = this
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
         (user) => {
-            window.sessionStorage.setItem('subfeed', JSON.stringify(user))
-          this.$router.replace('home')
+          window.sessionStorage.setItem('subfeed', JSON.stringify(user))
+          this.$router.replace('user')
         },
         (err) => {
-            vm.$notify({
-                group: 'foo',
-                title: ':(',
-                text: err,
-                type: 'error'
-            });
+          vm.$notify({
+            group: 'foo',
+            title: ':(',
+            text: err,
+            type: 'error'
+          })
         }
       )
     }
